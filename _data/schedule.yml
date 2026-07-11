@@ -1,61 +1,81 @@
 # ─────────────────────────────────────────────────────────────
-#  Emily's schedule — edit this file to update the Schedule page.
-#  No coding needed: just change the text between the quotes.
+#  Emily's weekly schedule — edit this file to update the page.
+#  No coding needed: change the text between the quotes.
 # ─────────────────────────────────────────────────────────────
 
-# Current status banner (shows at the top of the Schedule page).
+# Status banner at the top of the Schedule page.
 #   state: "in"  -> green "Teaching this week"
 #   state: "out" -> amber "Away" notice
 status:
   state: "in"
-  headline: "Teaching this week"
-  message: "All classes running as scheduled. Reserve your spot below — drop-ins welcome."
+  headline: "Here this week"
+  message: "See below for what's on each day. Days not listed are off."
 
-# Optional: dates Emily is away (leave dates: "" if none).
+# Dates Emily is away (leave dates: "" if none).
 away:
   - dates: ""          # e.g. "July 20–24"
-    reason: ""         # e.g. "No Stretch Lab — back Monday the 27th"
+    reason: ""         # e.g. "Away for a workshop — back the 27th"
 
-# Weekly recurring schedule. Add or remove sessions freely.
-# For a day with no classes, leave sessions empty:  sessions: []
-# level examples: "All levels", "Beginner", "Intermediate", "Open"
+# Activity types + their colors (used for the tags and the legend).
+# Add a new type here if Emily starts something new.
+types:
+  - key: "yoga"
+    label: "Yoga"
+    color: "#6b7a5e"
+  - key: "stretch"
+    label: "Stretch Lab"
+    color: "#c47a5a"
+  - key: "dramaturgy"
+    label: "Dramaturgy"
+    color: "#8a6ba8"
+  - key: "choreography"
+    label: "Choreography"
+    color: "#c9a24b"
+
+# Weekly schedule. For a day off, leave sessions empty:  sessions: []
+# Each session's "type" must match a key from the list above.
 week:
   - day: "Monday"
     sessions:
       - time: "6:00 PM"
         duration: "60 min"
         title: "Stretch Lab"
-        level: "All levels"
+        type: "stretch"
         location: "Studio A"
   - day: "Tuesday"
     sessions:
       - time: "7:30 AM"
         duration: "60 min"
         title: "Morning Yoga"
-        level: "All levels"
+        type: "yoga"
         location: "Studio A"
   - day: "Wednesday"
     sessions:
-      - time: "6:00 PM"
-        duration: "60 min"
-        title: "Stretch Lab"
-        level: "All levels"
-        location: "Studio A"
+      - time: "Afternoon"
+        duration: ""
+        title: "Dramaturgy — rehearsal"
+        type: "dramaturgy"
+        location: "Off-site"
   - day: "Thursday"
     sessions: []
   - day: "Friday"
     sessions:
       - time: "5:30 PM"
         duration: "60 min"
-        title: "Stretch & Restore"
-        level: "All levels"
+        title: "Stretch Lab"
+        type: "stretch"
         location: "Studio A"
   - day: "Saturday"
     sessions:
       - time: "10:00 AM"
         duration: "75 min"
-        title: "Weekend Flow"
-        level: "Open"
+        title: "Weekend Yoga Flow"
+        type: "yoga"
         location: "Studio A"
+      - time: "1:00 PM"
+        duration: ""
+        title: "Choreography session"
+        type: "choreography"
+        location: "Studio B"
   - day: "Sunday"
     sessions: []

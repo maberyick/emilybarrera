@@ -169,10 +169,15 @@ section { padding: 4rem 0; }
   padding: 0.7rem 1.1rem; margin: 0 0 0.8rem; color: var(--ink); font-size: 0.97rem;
 }
 
+/* Activity legend */
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin: 0 0 1.5rem; }
+.legend-item { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--ink-soft); }
+.legend-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+
 /* Day selector tabs */
 .day-tabs {
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;
-  margin: 2rem 0 1.5rem;
+  margin: 0 0 1.5rem;
 }
 .day-tab {
   display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
@@ -182,14 +187,20 @@ section { padding: 4rem 0; }
 }
 .day-tab:hover { transform: translateY(-2px); border-color: var(--sage); }
 .tab-day { font-weight: 700; font-size: 0.9rem; color: var(--ink); letter-spacing: 0.02em; }
-.tab-count {
+.tab-state {
   font-size: 0.72rem; color: var(--ink-soft);
-  min-width: 1.4em; height: 1.4em; line-height: 1.4em; text-align: center;
-  border-radius: 50%; background: var(--cream-soft);
+  min-width: 1.6em; height: 1.6em; line-height: 1.6em; text-align: center;
+  border-radius: 999px; padding: 0 0.4em; background: var(--cream-soft);
 }
 .day-tab.is-active { background: var(--sage); border-color: var(--sage); }
 .day-tab.is-active .tab-day { color: var(--white); }
-.day-tab.is-active .tab-count { background: rgba(255,255,255,0.25); color: var(--white); }
+.day-tab.is-active .tab-state { background: rgba(255,255,255,0.25); color: var(--white); }
+/* Off days: muted, so on/off reads at a glance */
+.day-tab.is-off { background: transparent; border-style: dashed; opacity: 0.72; }
+.day-tab.is-off .tab-day { color: var(--ink-soft); }
+.day-tab.is-off .tab-state { background: transparent; color: var(--ink-soft); font-style: italic; }
+.day-tab.is-off.is-active { background: var(--ink-soft); border-style: solid; opacity: 1; }
+.day-tab.is-off.is-active .tab-day, .day-tab.is-off.is-active .tab-state { color: var(--white); }
 
 /* Day panel + class rows */
 .panel-day { font-size: 1.6rem; margin: 0 0 1rem; }
@@ -205,16 +216,12 @@ section { padding: 4rem 0; }
 .ct-dur { display: block; font-size: 0.75rem; color: var(--ink-soft); margin-top: 0.15rem; }
 .class-info { flex: 1 1 auto; }
 .class-info h3 { font-size: 1.2rem; margin: 0 0 0.25rem; }
-.class-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; }
-.class-meta span {
+.class-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0; }
+.type-badge { font-size: 0.74rem; font-weight: 700; padding: 0.18rem 0.7rem; border-radius: 999px; }
+.meta-chip {
   font-size: 0.75rem; color: var(--ink-soft); background: var(--cream-soft);
   padding: 0.15rem 0.6rem; border-radius: 999px;
 }
-.class-book {
-  flex: none; background: var(--sage); color: var(--white); font-weight: 700; font-size: 0.9rem;
-  padding: 0.6rem 1.3rem; border-radius: 999px; transition: background 0.2s, transform 0.15s;
-}
-.class-book:hover { background: var(--sage-dark); color: var(--white); transform: translateY(-2px); }
 .schedule-cta { margin-top: 1.8rem; color: var(--ink-soft); }
 
 @media (max-width: 620px) {

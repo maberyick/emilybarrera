@@ -4,15 +4,14 @@ title: Schedule
 permalink: /schedule/
 ---
 {% assign s = site.data.schedule %}
-{% if site.booking_url and site.booking_url != "" %}{% assign book = site.booking_url %}{% else %}{% assign book = "/contact/" | relative_url %}{% endif %}
 <article class="page">
   <div class="wrap">
     <header class="page-head narrow">
       <h1>Schedule</h1>
-      <p class="page-subtitle">Book your spot in Stretch Lab, yoga & more.</p>
+      <p class="page-subtitle">Where to find me each week — and which days are off.</p>
     </header>
 
-    <!-- Status banner: in / out -->
+    <!-- Status banner -->
     <div class="status-banner status-{{ s.status.state }}">
       <span class="status-dot" aria-hidden="true"></span>
       <div>
@@ -25,12 +24,20 @@ permalink: /schedule/
     <div class="away-note"><strong>Away {{ a.dates }}</strong>{% if a.reason %} — {{ a.reason }}{% endif %}</div>
     {% endif %}{% endfor %}
 
-    <!-- Day selector tabs -->
+    <!-- Activity legend -->
+    <div class="legend">
+      {% for t in s.types %}
+      <span class="legend-item"><span class="legend-dot" style="background: {{ t.color }}"></span>{{ t.label }}</span>
+      {% endfor %}
+    </div>
+
+    <!-- Day selector tabs (shows on/off per day) -->
     <div class="day-tabs" role="tablist">
       {% for d in s.week %}
-      <button class="day-tab" role="tab" data-day="{{ forloop.index0 }}" aria-controls="day-{{ forloop.index0 }}">
+      {% assign off = false %}{% if d.sessions == empty %}{% assign off = true %}{% endif %}
+      <button class="day-tab{% if off %} is-off{% endif %}" role="tab" data-day="{{ forloop.index0 }}" aria-controls="day-{{ forloop.index0 }}">
         <span class="tab-day">{{ d.day | slice: 0, 3 }}</span>
-        <span class="tab-count">{% if d.sessions == empty %}—{% else %}{{ d.sessions | size }}{% endif %}</span>
+        <span class="tab-state">{% if off %}Off{% else %}{{ d.sessions | size }}{% endif %}</span>
       </button>
       {% endfor %}
     </div>
@@ -41,22 +48,23 @@ permalink: /schedule/
       <div class="day-panel" id="day-{{ forloop.index0 }}" data-day="{{ forloop.index0 }}" role="tabpanel" hidden>
         <h2 class="panel-day">{{ d.day }}</h2>
         {% if d.sessions == empty %}
-          <p class="panel-rest">No classes today — a day to rest and recover. 🌿</p>
+          <p class="panel-rest">Day off — no sessions scheduled. 🌿</p>
         {% else %}
           {% for sess in d.sessions %}
-          <div class="class-row">
+          {% assign t = s.types | where: "key", sess.type | first %}
+          {% if t %}{% assign col = t.color %}{% assign lbl = t.label %}{% else %}{% assign col = "#8a8577" %}{% assign lbl = sess.type %}{% endif %}
+          <div class="class-row" style="border-left-color: {{ col }}">
             <div class="class-time">
               <span class="ct-time">{{ sess.time }}</span>
-              {% if sess.duration %}<span class="ct-dur">{{ sess.duration }}</span>{% endif %}
+              {% if sess.duration and sess.duration != "" %}<span class="ct-dur">{{ sess.duration }}</span>{% endif %}
             </div>
             <div class="class-info">
               <h3>{{ sess.title }}</h3>
               <p class="class-meta">
-                {% if sess.level %}<span>{{ sess.level }}</span>{% endif %}
-                {% if sess.location %}<span>{{ sess.location }}</span>{% endif %}
+                <span class="type-badge" style="background: {{ col }}1f; color: {{ col }}">{{ lbl }}</span>
+                {% if sess.location %}<span class="meta-chip">{{ sess.location }}</span>{% endif %}
               </p>
             </div>
-            <a class="class-book" href="{{ book }}">Reserve</a>
           </div>
           {% endfor %}
         {% endif %}
@@ -65,8 +73,8 @@ permalink: /schedule/
     </div>
 
     <div class="narrow schedule-cta">
-      <p>Times may shift for pop-ups and workshops — check back here, or
-      <a href="{{ '/contact/' | relative_url }}">message me</a> with any questions.</p>
+      <p>Schedule shifts week to week — check back here, or
+      <a href="{{ '/contact/' | relative_url }}">message me</a> to confirm a session.</p>
     </div>
   </div>
 </article>
@@ -80,9 +88,7 @@ permalink: /schedule/
     panels.forEach(function (p) { p.hidden = (+p.dataset.day !== i); });
   }
   tabs.forEach(function (t) { t.addEventListener('click', function () { show(+t.dataset.day); }); });
-  // Open on today (Mon=0 … Sun=6). JS getDay(): Sun=0 … Sat=6.
-  var js = new Date().getDay();
-  var today = (js === 0) ? 6 : js - 1;
-  show(today);
+  var js = new Date().getDay();          // Sun=0 … Sat=6
+  show((js === 0) ? 6 : js - 1);          // convert to Mon=0 … Sun=6
 })();
 </script>
