@@ -4,11 +4,12 @@ title: Schedule
 permalink: /schedule/
 ---
 {% assign s = site.data.schedule %}
+{% if site.booking_url and site.booking_url != "" %}{% assign book = site.booking_url %}{% else %}{% assign book = "/contact/" | relative_url %}{% endif %}
 <article class="page">
   <div class="wrap">
     <header class="page-head narrow">
       <h1>Schedule</h1>
-      <p class="page-subtitle">When to find me on the mat — Stretch Lab, yoga & more.</p>
+      <p class="page-subtitle">Book your spot in Stretch Lab, yoga & more.</p>
     </header>
 
     <!-- Status banner: in / out -->
@@ -20,26 +21,42 @@ permalink: /schedule/
       </div>
     </div>
 
-    <!-- Away notes (only show if filled in) -->
     {% for a in s.away %}{% if a.dates and a.dates != "" %}
-    <div class="away-note">
-      <strong>Away {{ a.dates }}</strong>{% if a.reason %} — {{ a.reason }}{% endif %}
-    </div>
+    <div class="away-note"><strong>Away {{ a.dates }}</strong>{% if a.reason %} — {{ a.reason }}{% endif %}</div>
     {% endif %}{% endfor %}
 
-    <!-- Weekly grid -->
-    <div class="week-grid">
+    <!-- Day selector tabs -->
+    <div class="day-tabs" role="tablist">
       {% for d in s.week %}
-      <div class="day-col{% if d.sessions == empty %} day-empty{% endif %}">
-        <h3 class="day-name">{{ d.day }}</h3>
+      <button class="day-tab" role="tab" data-day="{{ forloop.index0 }}" aria-controls="day-{{ forloop.index0 }}">
+        <span class="tab-day">{{ d.day | slice: 0, 3 }}</span>
+        <span class="tab-count">{% if d.sessions == empty %}—{% else %}{{ d.sessions | size }}{% endif %}</span>
+      </button>
+      {% endfor %}
+    </div>
+
+    <!-- Day panels -->
+    <div class="day-panels">
+      {% for d in s.week %}
+      <div class="day-panel" id="day-{{ forloop.index0 }}" data-day="{{ forloop.index0 }}" role="tabpanel" hidden>
+        <h2 class="panel-day">{{ d.day }}</h2>
         {% if d.sessions == empty %}
-          <p class="day-rest">Rest day</p>
+          <p class="panel-rest">No classes today — a day to rest and recover. 🌿</p>
         {% else %}
           {% for sess in d.sessions %}
-          <div class="session-card">
-            <p class="session-time">{{ sess.time }}</p>
-            <p class="session-title">{{ sess.title }}</p>
-            {% if sess.location %}<p class="session-loc">{{ sess.location }}</p>{% endif %}
+          <div class="class-row">
+            <div class="class-time">
+              <span class="ct-time">{{ sess.time }}</span>
+              {% if sess.duration %}<span class="ct-dur">{{ sess.duration }}</span>{% endif %}
+            </div>
+            <div class="class-info">
+              <h3>{{ sess.title }}</h3>
+              <p class="class-meta">
+                {% if sess.level %}<span>{{ sess.level }}</span>{% endif %}
+                {% if sess.location %}<span>{{ sess.location }}</span>{% endif %}
+              </p>
+            </div>
+            <a class="class-book" href="{{ book }}">Reserve</a>
           </div>
           {% endfor %}
         {% endif %}
@@ -48,8 +65,24 @@ permalink: /schedule/
     </div>
 
     <div class="narrow schedule-cta">
-      <p>Times can shift for pop-ups and workshops — check back here, or
-      <a href="{{ '/contact/' | relative_url }}">message me</a> to reserve your spot.</p>
+      <p>Times may shift for pop-ups and workshops — check back here, or
+      <a href="{{ '/contact/' | relative_url }}">message me</a> with any questions.</p>
     </div>
   </div>
 </article>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.day-tab');
+  var panels = document.querySelectorAll('.day-panel');
+  function show(i) {
+    tabs.forEach(function (t) { t.classList.toggle('is-active', +t.dataset.day === i); });
+    panels.forEach(function (p) { p.hidden = (+p.dataset.day !== i); });
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(+t.dataset.day); }); });
+  // Open on today (Mon=0 … Sun=6). JS getDay(): Sun=0 … Sat=6.
+  var js = new Date().getDay();
+  var today = (js === 0) ? 6 : js - 1;
+  show(today);
+})();
+</script>

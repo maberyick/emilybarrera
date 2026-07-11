@@ -9,43 +9,53 @@
 status:
   state: "in"
   headline: "Teaching this week"
-  message: "All classes running as scheduled. Drop-ins welcome — message me to save a spot."
+  message: "All classes running as scheduled. Reserve your spot below — drop-ins welcome."
 
-# Optional: dates Emily is away (leave the list empty if none).
-# Each shows as an amber note under the banner.
+# Optional: dates Emily is away (leave dates: "" if none).
 away:
   - dates: ""          # e.g. "July 20–24"
     reason: ""         # e.g. "No Stretch Lab — back Monday the 27th"
 
 # Weekly recurring schedule. Add or remove sessions freely.
 # For a day with no classes, leave sessions empty:  sessions: []
+# level examples: "All levels", "Beginner", "Intermediate", "Open"
 week:
   - day: "Monday"
     sessions:
-      - time: "6:00 – 7:00 PM"
+      - time: "6:00 PM"
+        duration: "60 min"
         title: "Stretch Lab"
+        level: "All levels"
         location: "Studio A"
   - day: "Tuesday"
     sessions:
-      - time: "7:30 – 8:30 AM"
+      - time: "7:30 AM"
+        duration: "60 min"
         title: "Morning Yoga"
+        level: "All levels"
         location: "Studio A"
   - day: "Wednesday"
     sessions:
-      - time: "6:00 – 7:00 PM"
+      - time: "6:00 PM"
+        duration: "60 min"
         title: "Stretch Lab"
+        level: "All levels"
         location: "Studio A"
   - day: "Thursday"
     sessions: []
   - day: "Friday"
     sessions:
-      - time: "5:30 – 6:30 PM"
+      - time: "5:30 PM"
+        duration: "60 min"
         title: "Stretch & Restore"
+        level: "All levels"
         location: "Studio A"
   - day: "Saturday"
     sessions:
-      - time: "10:00 – 11:00 AM"
+      - time: "10:00 AM"
+        duration: "75 min"
         title: "Weekend Flow"
+        level: "Open"
         location: "Studio A"
   - day: "Sunday"
     sessions: []
