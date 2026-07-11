@@ -36,46 +36,24 @@ types:
 # Each session's "type" must match a key from the list above.
 week:
   - day: "Monday"
+    sessions: []
+  - day: "Tuesday"
+    sessions: []
+  - day: "Wednesday"
+    sessions: []
+  - day: "Thursday"
     sessions:
       - time: "6:00 PM"
-        duration: "60 min"
-        title: "Stretch Lab"
-        type: "stretch"
-        location: "Studio A"
-  - day: "Tuesday"
-    sessions:
-      - time: "7:30 AM"
-        duration: "60 min"
-        title: "Morning Yoga"
+        duration: "1 hr"
+        title: "The Yoga Lab"
         type: "yoga"
-        location: "Studio A"
-  - day: "Wednesday"
-    sessions:
-      - time: "Afternoon"
-        duration: ""
-        title: "Dramaturgy — rehearsal"
-        type: "dramaturgy"
-        location: "Off-site"
-  - day: "Thursday"
-    sessions: []
   - day: "Friday"
-    sessions:
-      - time: "5:30 PM"
-        duration: "60 min"
-        title: "Stretch Lab"
-        type: "stretch"
-        location: "Studio A"
-  - day: "Saturday"
-    sessions:
-      - time: "10:00 AM"
-        duration: "75 min"
-        title: "Weekend Yoga Flow"
-        type: "yoga"
-        location: "Studio A"
-      - time: "1:00 PM"
-        duration: ""
-        title: "Choreography session"
-        type: "choreography"
-        location: "Studio B"
-  - day: "Sunday"
     sessions: []
+  - day: "Saturday"
+    sessions: []
+  - day: "Sunday"
+    sessions:
+      - time: "10:30 AM"
+        duration: "1 hr"
+        title: "The Yoga Lab"
+        type: "yoga"
