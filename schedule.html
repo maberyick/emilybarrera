@@ -1,0 +1,55 @@
+---
+layout: default
+title: Schedule
+permalink: /schedule/
+---
+{% assign s = site.data.schedule %}
+<article class="page">
+  <div class="wrap">
+    <header class="page-head narrow">
+      <h1>Schedule</h1>
+      <p class="page-subtitle">When to find me on the mat — Stretch Lab, yoga & more.</p>
+    </header>
+
+    <!-- Status banner: in / out -->
+    <div class="status-banner status-{{ s.status.state }}">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>{{ s.status.headline }}</strong>
+        <p>{{ s.status.message }}</p>
+      </div>
+    </div>
+
+    <!-- Away notes (only show if filled in) -->
+    {% for a in s.away %}{% if a.dates and a.dates != "" %}
+    <div class="away-note">
+      <strong>Away {{ a.dates }}</strong>{% if a.reason %} — {{ a.reason }}{% endif %}
+    </div>
+    {% endif %}{% endfor %}
+
+    <!-- Weekly grid -->
+    <div class="week-grid">
+      {% for d in s.week %}
+      <div class="day-col{% if d.sessions == empty %} day-empty{% endif %}">
+        <h3 class="day-name">{{ d.day }}</h3>
+        {% if d.sessions == empty %}
+          <p class="day-rest">Rest day</p>
+        {% else %}
+          {% for sess in d.sessions %}
+          <div class="session-card">
+            <p class="session-time">{{ sess.time }}</p>
+            <p class="session-title">{{ sess.title }}</p>
+            {% if sess.location %}<p class="session-loc">{{ sess.location }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="narrow schedule-cta">
+      <p>Times can shift for pop-ups and workshops — check back here, or
+      <a href="{{ '/contact/' | relative_url }}">message me</a> to reserve your spot.</p>
+    </div>
+  </div>
+</article>

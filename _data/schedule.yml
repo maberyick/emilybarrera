@@ -1,0 +1,51 @@
+# ─────────────────────────────────────────────────────────────
+#  Emily's schedule — edit this file to update the Schedule page.
+#  No coding needed: just change the text between the quotes.
+# ─────────────────────────────────────────────────────────────
+
+# Current status banner (shows at the top of the Schedule page).
+#   state: "in"  -> green "Teaching this week"
+#   state: "out" -> amber "Away" notice
+status:
+  state: "in"
+  headline: "Teaching this week"
+  message: "All classes running as scheduled. Drop-ins welcome — message me to save a spot."
+
+# Optional: dates Emily is away (leave the list empty if none).
+# Each shows as an amber note under the banner.
+away:
+  - dates: ""          # e.g. "July 20–24"
+    reason: ""         # e.g. "No Stretch Lab — back Monday the 27th"
+
+# Weekly recurring schedule. Add or remove sessions freely.
+# For a day with no classes, leave sessions empty:  sessions: []
+week:
+  - day: "Monday"
+    sessions:
+      - time: "6:00 – 7:00 PM"
+        title: "Stretch Lab"
+        location: "Studio A"
+  - day: "Tuesday"
+    sessions:
+      - time: "7:30 – 8:30 AM"
+        title: "Morning Yoga"
+        location: "Studio A"
+  - day: "Wednesday"
+    sessions:
+      - time: "6:00 – 7:00 PM"
+        title: "Stretch Lab"
+        location: "Studio A"
+  - day: "Thursday"
+    sessions: []
+  - day: "Friday"
+    sessions:
+      - time: "5:30 – 6:30 PM"
+        title: "Stretch & Restore"
+        location: "Studio A"
+  - day: "Saturday"
+    sessions:
+      - time: "10:00 – 11:00 AM"
+        title: "Weekend Flow"
+        location: "Studio A"
+  - day: "Sunday"
+    sessions: []
