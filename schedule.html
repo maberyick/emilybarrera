@@ -31,46 +31,63 @@ permalink: /schedule/
       {% endfor %}
     </div>
 
-    <!-- Day selector tabs (shows on/off per day) -->
-    <div class="day-tabs" role="tablist">
-      {% for d in s.week %}
-      {% assign off = false %}{% if d.sessions == empty %}{% assign off = true %}{% endif %}
-      <button class="day-tab{% if off %} is-off{% endif %}" role="tab" data-day="{{ forloop.index0 }}" aria-controls="day-{{ forloop.index0 }}">
-        <span class="tab-day">{{ d.day | slice: 0, 3 }}</span>
-        <span class="tab-state">{% if off %}Off{% else %}{{ d.sessions | size }}{% endif %}</span>
-      </button>
-      {% endfor %}
+    <!-- View toggle -->
+    <div class="view-toggle" role="tablist">
+      <button class="vt-btn is-active" data-view="month">Month</button>
+      <button class="vt-btn" data-view="week">This week</button>
     </div>
 
-    <!-- Day panels -->
-    <div class="day-panels">
-      {% for d in s.week %}
-      <div class="day-panel" id="day-{{ forloop.index0 }}" data-day="{{ forloop.index0 }}" role="tabpanel" hidden>
-        <h2 class="panel-day">{{ d.day }}</h2>
-        {% if d.sessions == empty %}
-          <p class="panel-rest">Day off — no sessions scheduled. 🌿</p>
-        {% else %}
-          {% for sess in d.sessions %}
-          {% assign t = s.types | where: "key", sess.type | first %}
-          {% if t %}{% assign col = t.color %}{% assign lbl = t.label %}{% else %}{% assign col = "#8a8577" %}{% assign lbl = sess.type %}{% endif %}
-          <div class="class-row" style="border-left-color: {{ col }}">
-            <div class="class-time">
-              <span class="ct-time">{{ sess.time }}</span>
-              {% if sess.duration and sess.duration != "" %}<span class="ct-dur">{{ sess.duration }}</span>{% endif %}
-            </div>
-            <div class="class-info">
-              <h3>{{ sess.title }}</h3>
-              <p class="class-meta">
-                <span class="type-badge" style="background: {{ col }}1f; color: {{ col }}">{{ lbl }}</span>
-                {% if sess.location %}<span class="meta-chip">{{ sess.location }}</span>{% endif %}
-              </p>
-            </div>
-          </div>
-          {% endfor %}
-        {% endif %}
+    <!-- MONTH calendar -->
+    <section id="view-month" class="cal-wrap">
+      <div class="cal-head">
+        <button id="cal-prev" class="cal-nav" aria-label="Previous month">&lsaquo;</button>
+        <h2 id="cal-title">&nbsp;</h2>
+        <button id="cal-next" class="cal-nav" aria-label="Next month">&rsaquo;</button>
       </div>
-      {% endfor %}
-    </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <p class="cal-hint">Colors match the legend above. Times shown on class days.</p>
+    </section>
+
+    <!-- WEEK list -->
+    <section id="view-week" hidden>
+      <div class="day-tabs" role="tablist">
+        {% for d in s.week %}
+        {% assign off = false %}{% if d.sessions == empty %}{% assign off = true %}{% endif %}
+        <button class="day-tab{% if off %} is-off{% endif %}" role="tab" data-day="{{ forloop.index0 }}" aria-controls="day-{{ forloop.index0 }}">
+          <span class="tab-day">{{ d.day | slice: 0, 3 }}</span>
+          <span class="tab-state">{% if off %}Off{% else %}{{ d.sessions | size }}{% endif %}</span>
+        </button>
+        {% endfor %}
+      </div>
+      <div class="day-panels">
+        {% for d in s.week %}
+        <div class="day-panel" id="day-{{ forloop.index0 }}" data-day="{{ forloop.index0 }}" role="tabpanel" hidden>
+          <h2 class="panel-day">{{ d.day }}</h2>
+          {% if d.sessions == empty %}
+            <p class="panel-rest">Day off — no sessions scheduled. 🌿</p>
+          {% else %}
+            {% for sess in d.sessions %}
+            {% assign t = s.types | where: "key", sess.type | first %}
+            {% if t %}{% assign col = t.color %}{% assign lbl = t.label %}{% else %}{% assign col = "#8a8577" %}{% assign lbl = sess.type %}{% endif %}
+            <div class="class-row" style="border-left-color: {{ col }}">
+              <div class="class-time">
+                <span class="ct-time">{{ sess.time }}</span>
+                {% if sess.duration and sess.duration != "" %}<span class="ct-dur">{{ sess.duration }}</span>{% endif %}
+              </div>
+              <div class="class-info">
+                <h3>{{ sess.title }}</h3>
+                <p class="class-meta">
+                  <span class="type-badge" style="background: {{ col }}1f; color: {{ col }}">{{ lbl }}</span>
+                  {% if sess.location %}<span class="meta-chip">{{ sess.location }}</span>{% endif %}
+                </p>
+              </div>
+            </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
 
     <div class="narrow schedule-cta">
       <p>Schedule shifts week to week — check back here, or
@@ -81,14 +98,94 @@ permalink: /schedule/
 
 <script>
 (function () {
+  var DATA = {{ s | jsonify }};
+
+  /* ---- View toggle ---- */
+  var vt = document.querySelectorAll('.vt-btn');
+  var views = { month: document.getElementById('view-month'), week: document.getElementById('view-week') };
+  vt.forEach(function (b) {
+    b.addEventListener('click', function () {
+      vt.forEach(function (x) { x.classList.toggle('is-active', x === b); });
+      Object.keys(views).forEach(function (k) { views[k].hidden = (k !== b.dataset.view); });
+    });
+  });
+
+  /* ---- Week view: day tabs ---- */
   var tabs = document.querySelectorAll('.day-tab');
   var panels = document.querySelectorAll('.day-panel');
-  function show(i) {
+  function showDay(i) {
     tabs.forEach(function (t) { t.classList.toggle('is-active', +t.dataset.day === i); });
     panels.forEach(function (p) { p.hidden = (+p.dataset.day !== i); });
   }
-  tabs.forEach(function (t) { t.addEventListener('click', function () { show(+t.dataset.day); }); });
-  var js = new Date().getDay();          // Sun=0 … Sat=6
-  show((js === 0) ? 6 : js - 1);          // convert to Mon=0 … Sun=6
+  tabs.forEach(function (t) { t.addEventListener('click', function () { showDay(+t.dataset.day); }); });
+  var jsDay = new Date().getDay();               // Sun=0 … Sat=6
+  showDay((jsDay === 0) ? 6 : jsDay - 1);          // convert to Mon=0 … Sun=6
+
+  /* ---- Month calendar ---- */
+  var typeMap = {};
+  (DATA.types || []).forEach(function (t) { typeMap[t.key] = t; });
+  var byWeekday = {};                              // "Sunday" -> [sessions]
+  (DATA.week || []).forEach(function (d) { byWeekday[d.day] = d.sessions || []; });
+  var overrides = {};                             // "YYYY-MM-DD" -> {cancel, add:[], note}
+  (DATA.overrides || []).forEach(function (o) {
+    if (!o || !o.date) return;
+    if (!overrides[o.date]) overrides[o.date] = { cancel: false, add: [] };
+    if (o.cancel) overrides[o.date].cancel = true;
+    if (o.note) overrides[o.date].note = o.note;
+    if (o.title) overrides[o.date].add.push(o);
+  });
+
+  var WD = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var MON = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var view = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function ymd(dt) { return dt.getFullYear() + '-' + pad(dt.getMonth() + 1) + '-' + pad(dt.getDate()); }
+
+  function sessionsFor(dt) {
+    var ov = overrides[ymd(dt)];
+    var list = (byWeekday[WD[dt.getDay()]] || []).slice();
+    if (ov && ov.cancel) list = [];
+    if (ov && ov.add.length) list = list.concat(ov.add);
+    return { list: list, cancelled: !!(ov && ov.cancel), note: ov && ov.note };
+  }
+
+  function render() {
+    var grid = document.getElementById('cal-grid');
+    document.getElementById('cal-title').textContent = MON[view.getMonth()] + ' ' + view.getFullYear();
+    grid.innerHTML = '';
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function (w) {
+      var h = document.createElement('div'); h.className = 'cal-wd'; h.textContent = w; grid.appendChild(h);
+    });
+    var startDow = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+    var dim = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (var i = 0; i < startDow; i++) {
+      var b = document.createElement('div'); b.className = 'cal-cell cal-empty'; grid.appendChild(b);
+    }
+    for (var day = 1; day <= dim; day++) {
+      var dt = new Date(view.getFullYear(), view.getMonth(), day);
+      var cell = document.createElement('div');
+      cell.className = 'cal-cell' + (ymd(dt) === ymd(today) ? ' cal-today' : '');
+      var num = document.createElement('span'); num.className = 'cal-num'; num.textContent = day; cell.appendChild(num);
+      var info = sessionsFor(dt);
+      if (info.cancelled) {
+        var off = document.createElement('span'); off.className = 'cal-off';
+        off.textContent = info.note || 'Off'; cell.appendChild(off);
+      }
+      info.list.forEach(function (sn) {
+        var t = typeMap[sn.type] || { color: '#8a8577', label: sn.type };
+        var chip = document.createElement('span'); chip.className = 'cal-chip';
+        chip.style.background = t.color;
+        chip.textContent = sn.time;
+        chip.title = sn.title + (sn.duration ? ' (' + sn.duration + ')' : '');
+        cell.appendChild(chip);
+      });
+      grid.appendChild(cell);
+    }
+  }
+  document.getElementById('cal-prev').addEventListener('click', function () { view.setMonth(view.getMonth() - 1); render(); });
+  document.getElementById('cal-next').addEventListener('click', function () { view.setMonth(view.getMonth() + 1); render(); });
+  render();
 })();
 </script>

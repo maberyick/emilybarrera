@@ -57,3 +57,18 @@ week:
         duration: "1 hr"
         title: "The Yoga Lab"
         type: "yoga"
+
+# ── Specific-date exceptions (override the weekly pattern above) ──
+# Use these to mark a normal class day OFF, or add a one-off session.
+# Dates must be written YYYY-MM-DD. They show up on the month calendar.
+# Examples — remove the leading "#" and edit the date to activate:
+#   - date: "2026-07-19"          # a Sunday she's away
+#     cancel: true
+#     note: "No class"
+#   - date: "2026-08-08"          # a one-off extra session
+#     time: "2:00 PM"
+#     duration: "1 hr"
+#     title: "Pop-up Stretch"
+#     type: "stretch"
+overrides: []
+
