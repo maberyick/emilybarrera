@@ -21,16 +21,16 @@ away:
 types:
   - key: "yoga"
     label: "Yoga"
-    color: "#6b7a5e"
+    color: "#5c8271"      # seafoam green
   - key: "stretch"
     label: "Stretch Lab"
-    color: "#c47a5a"
+    color: "#a83a6d"      # berry / magenta
   - key: "dramaturgy"
     label: "Dramaturgy"
-    color: "#8a6ba8"
+    color: "#6f4d7d"      # plum
   - key: "choreography"
     label: "Choreography"
-    color: "#c9a24b"
+    color: "#a8792f"      # gold / ochre
 
 # Weekly schedule. For a day off, leave sessions empty:  sessions: []
 # Each session's "type" must match a key from the list above.
