@@ -1,0 +1,33 @@
+---
+layout: default
+title: Journal
+permalink: /journal/
+pagination:
+  enabled: true
+---
+<article class="page">
+  <div class="wrap narrow">
+    <header class="page-head">
+      <h1>Journal</h1>
+      <p class="page-subtitle">Notes from class, the studio, and the stage.</p>
+    </header>
+
+    <div class="posts-list">
+      {% for post in paginator.posts %}
+      <a class="post-row" href="{{ post.url | relative_url }}">
+        <p class="post-row-meta">{{ post.date | date: "%B %-d, %Y" }}{% if post.category %} · {{ post.category }}{% endif %}</p>
+        <h2>{{ post.title }}</h2>
+        <p class="post-row-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if paginator.total_pages > 1 %}
+    <nav class="pager">
+      {% if paginator.previous_page %}<a href="{{ paginator.previous_page_path | relative_url }}">← Newer</a>{% endif %}
+      <span>Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+      {% if paginator.next_page %}<a href="{{ paginator.next_page_path | relative_url }}">Older →</a>{% endif %}
+    </nav>
+    {% endif %}
+  </div>
+</article>

@@ -1,0 +1,76 @@
+---
+layout: default
+---
+
+<section class="hero">
+  <div class="wrap hero-wrap">
+    <p class="hero-eyebrow">Yoga · Stretch · Movement</p>
+    <h1 class="hero-title">Move with intention,<br>rest with ease.</h1>
+    <p class="hero-lede">
+      I'm Emily Barrera — a movement teacher and artist. I guide yoga and stretch
+      classes, and create through choreography and dramaturgy. Whether you're finding
+      length in your body or shaping a piece for the stage, it all begins with breath.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="{{ '/classes/' | relative_url }}">Explore classes</a>
+      <a class="btn btn-ghost" href="{{ '/contact/' | relative_url }}">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<section class="offerings">
+  <div class="wrap">
+    <h2 class="section-title">What I offer</h2>
+    <div class="offer-grid">
+      <div class="offer-card">
+        <h3>Yoga</h3>
+        <p>Grounded, breath-led classes for strength, balance, and calm — welcoming to every level.</p>
+      </div>
+      <div class="offer-card">
+        <h3>Stretch</h3>
+        <p>Deep, restorative mobility work to open the body, release tension, and move freely.</p>
+      </div>
+      <div class="offer-card">
+        <h3>Choreography</h3>
+        <p>Movement crafted for the stage — collaborating with dancers and performers to bring ideas to life.</p>
+      </div>
+      <div class="offer-card">
+        <h3>Dramaturgy</h3>
+        <p>Shaping the story and structure of a work — the thinking behind the movement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="feature">
+  <div class="wrap feature-wrap">
+    <div class="feature-text">
+      <h2 class="section-title">A practice, a performance, a play</h2>
+      <p>
+        My work lives where the studio meets the stage. In class, I help people reconnect
+        with their bodies — softening, strengthening, and breathing. In the theatre, that
+        same attention becomes choreography and dramaturgy.
+      </p>
+      <p><a class="text-link" href="{{ '/about/' | relative_url }}">More about me →</a></p>
+    </div>
+    <div class="feature-media" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="journal-preview">
+  <div class="wrap">
+    <div class="section-head-row">
+      <h2 class="section-title">From the journal</h2>
+      <a class="text-link" href="{{ '/journal/' | relative_url }}">All posts →</a>
+    </div>
+    <div class="posts-grid">
+      {% for post in site.posts limit:3 %}
+      <a class="post-card" href="{{ post.url | relative_url }}">
+        <p class="post-card-meta">{{ post.date | date: "%b %-d, %Y" }}{% if post.category %} · {{ post.category }}{% endif %}</p>
+        <h3>{{ post.title }}</h3>
+        <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

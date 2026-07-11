@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<article class="post">
+  <div class="wrap narrow">
+    <header class="post-head">
+      <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>{% if page.category %} · {{ page.category }}{% endif %}</p>
+      <h1>{{ page.title }}</h1>
+      {% if page.subtitle %}<p class="post-subtitle">{{ page.subtitle }}</p>{% endif %}
+    </header>
+    {% if page.image %}<img class="post-hero" src="{{ page.image | relative_url }}" alt="{{ page.title }}">{% endif %}
+    <div class="prose">
+      {{ content }}
+    </div>
+    <footer class="post-foot">
+      <a href="{{ '/journal/' | relative_url }}">← Back to the journal</a>
+    </footer>
+  </div>
+</article>

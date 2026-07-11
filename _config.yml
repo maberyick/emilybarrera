@@ -1,0 +1,34 @@
+# Site settings
+title: Emily Barrera
+tagline: Yoga · Stretch · Movement
+description: >-
+  Emily Barrera — yoga and stretch classes, choreography, and dramaturgy.
+  Movement as practice, performance, and play.
+author: Emily Barrera
+email: ""            # add a contact email
+url: "https://emilybarreramovement.com"
+baseurl: ""
+
+# Social / contact (fill in what she uses; leave blank to hide)
+instagram: ""       # e.g. emilybarrera.movement
+youtube: ""
+email_public: ""    # public contact email shown on the site
+booking_url: ""     # link to a booking/schedule page if any
+
+# Build settings
+markdown: kramdown
+permalink: /journal/:year/:month/:day/:title/
+paginate: 6
+paginate_path: "/journal/page:num/"
+
+plugins:
+  - jekyll-paginate
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# What Jekyll should not copy into the built site
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
